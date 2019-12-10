@@ -1,0 +1,14 @@
+C:\Users\1\Desktop\Restauracja\Restauracja\bin\Debug\netcoreapp2.1\Restauracja.deps.json
+C:\Users\1\Desktop\Restauracja\Restauracja\bin\Debug\netcoreapp2.1\Restauracja.runtimeconfig.json
+C:\Users\1\Desktop\Restauracja\Restauracja\bin\Debug\netcoreapp2.1\Restauracja.runtimeconfig.dev.json
+C:\Users\1\Desktop\Restauracja\Restauracja\bin\Debug\netcoreapp2.1\Restauracja.dll
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.csprojAssemblyReference.cache
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.csproj.CoreCompileInputs.cache
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.RazorAssemblyInfo.cache
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.RazorAssemblyInfo.cs
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.AssemblyInfoInputs.cache
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.AssemblyInfo.cs
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.RazorTargetAssemblyInfo.cache
+C:\Users\1\Desktop\Restauracja\Restauracja\bin\Debug\netcoreapp2.1\Restauracja.pdb
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.dll
+C:\Users\1\Desktop\Restauracja\Restauracja\obj\Debug\netcoreapp2.1\Restauracja.pdb
