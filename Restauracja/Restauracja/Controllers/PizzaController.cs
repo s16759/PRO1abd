@@ -8,7 +8,7 @@ using Restauracja.Models;
 
 namespace Restauracja.Controllers
 {
-    [Route("api/menu/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class PizzaController : ControllerBase
     {
@@ -30,6 +30,39 @@ namespace Restauracja.Controllers
             var pizza = _context.Pizza.FirstOrDefault(e => e.IdPizza == id);
             if (pizza == null)
                 return NotFound();
+
+            return Ok(pizza);
+        }
+
+        [HttpPost]
+        public IActionResult Create(Pizza newPizza)
+        {
+            _context.Pizza.Add(newPizza);
+            _context.SaveChanges();
+
+            return StatusCode(201, newPizza);
+        }
+
+        [HttpPut("{id:Guid}")]
+        public IActionResult Update(Guid id, Pizza updatedPizza)
+        {
+            if (_context.Pizza.Count(e => e.IdPizza == id) == 0)
+                return NotFound();
+            _context.Pizza.Attach(updatedPizza);
+            _context.Entry(updatedPizza).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
+
+            return Ok(updatedPizza);
+        }
+        
+        [HttpDelete("{id:Guid}")]
+        public IActionResult Delete(Guid id)
+        {
+            var pizza = _context.Pizza.FirstOrDefault(e=>e.IdPizza==id);
+            if (pizza == null)
+                return NotFound();
+            _context.Pizza.Remove(pizza);
+            _context.SaveChanges();
 
             return Ok(pizza);
         }

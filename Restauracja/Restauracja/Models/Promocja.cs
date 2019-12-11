@@ -11,7 +11,7 @@ namespace Restauracja.Models
             Zamowienie = new HashSet<Zamowienie>();
         }
 
-        public string IdPromocja { get; set; }
+        public Guid IdPromocja { get; set; }
         public string Nazwa { get; set; }
         public string Opis { get; set; }
         public DateTime Od { get; set; }

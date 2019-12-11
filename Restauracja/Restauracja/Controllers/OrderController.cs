@@ -19,19 +19,21 @@ namespace Restauracja.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPizzas()
+        public IActionResult GetOrder()
         {
-            return Ok(_context.Zamowienie.First().IdPizzaNavigation);
+            return Ok(_context.Zamowienie.FirstOrDefault().ListaPizz);
         }
 
-        /*[HttpGet("{id:Guid}")]
-        public IActionResult GetPizza(Guid id)
+        [HttpDelete("{id:Guid}")]
+        public IActionResult Delete(Guid id)
         {
-            var pizza = _context.Zamowienie.First().IdPizzaNavigation.FirstOrDefault(e => e.IdPizza == id);
+            var pizza = _context.Zamowienie.FirstOrDefault().ListaPizz.FirstOrDefault(e => e.IdPizza == id);
             if (pizza == null)
                 return NotFound();
+            _context.Zamowienie.FirstOrDefault().ListaPizz.Remove(pizza);
+            _context.SaveChanges();
 
             return Ok(pizza);
-        }*/
+        }
     }
 }

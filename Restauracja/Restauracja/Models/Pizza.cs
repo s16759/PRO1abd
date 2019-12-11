@@ -8,19 +8,20 @@ namespace Restauracja.Models
         public Pizza()
         {
             ListaDodatkow = new HashSet<ListaDodatkow>();
-            Zamowienie = new HashSet<Zamowienie>();
+            ListaPizz = new HashSet<ListaPizz>();
         }
 
         public Guid IdPizza { get; set; }
+        public Guid? IdPromocja { get; set; }
         public Guid? IdSos { get; set; }
-        public string IdPromocja { get; set; }
+        public int IdRozmiar { get; set; }
         public string Nazwa { get; set; }
         public int Cena { get; set; }
-        public int Rozmiar { get; set; }
 
         public Promocja IdPromocjaNavigation { get; set; }
+        public Rozmiar IdRozmiarNavigation { get; set; }
         public Sos IdSosNavigation { get; set; }
         public ICollection<ListaDodatkow> ListaDodatkow { get; set; }
-        public ICollection<Zamowienie> Zamowienie { get; set; }
+        public ICollection<ListaPizz> ListaPizz { get; set; }
     }
 }

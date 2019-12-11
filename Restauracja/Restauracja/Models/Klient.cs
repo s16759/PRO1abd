@@ -11,6 +11,8 @@ namespace Restauracja.Models
         }
 
         public Guid IdKlient { get; set; }
+        public string Email { get; set; }
+        public string Haslo { get; set; }
         public string DaneOsobowe { get; set; }
         public string Telefon { get; set; }
         public string Adres { get; set; }

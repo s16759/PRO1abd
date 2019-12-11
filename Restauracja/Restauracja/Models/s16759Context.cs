@@ -20,8 +20,10 @@ namespace Restauracja.Models
         public virtual DbSet<Dostawca> Dostawca { get; set; }
         public virtual DbSet<Klient> Klient { get; set; }
         public virtual DbSet<ListaDodatkow> ListaDodatkow { get; set; }
+        public virtual DbSet<ListaPizz> ListaPizz { get; set; }
         public virtual DbSet<Pizza> Pizza { get; set; }
         public virtual DbSet<Promocja> Promocja { get; set; }
+        public virtual DbSet<Rozmiar> Rozmiar { get; set; }
         public virtual DbSet<Sos> Sos { get; set; }
         public virtual DbSet<Zamowienie> Zamowienie { get; set; }
 
@@ -29,6 +31,7 @@ namespace Restauracja.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Data Source=db-mssql;Initial Catalog=s16759;Integrated Security=True");
             }
         }
@@ -49,20 +52,18 @@ namespace Restauracja.Models
 
                 entity.Property(e => e.Nazwa)
                     .IsRequired()
-                    .HasColumnName("nazwa")
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
+                    .HasColumnName("nazwa");
             });
 
             modelBuilder.Entity<Dostawa>(entity =>
             {
-                entity.HasKey(e => new { e.IdDostawca, e.IdZamowienie });
+                entity.HasKey(e => new { e.IdZamowienie, e.IdDostawca });
 
                 entity.ToTable("DOSTAWA");
 
-                entity.Property(e => e.IdDostawca).HasColumnName("idDostawca");
-
                 entity.Property(e => e.IdZamowienie).HasColumnName("idZamowienie");
+
+                entity.Property(e => e.IdDostawca).HasColumnName("idDostawca");
 
                 entity.Property(e => e.Czas).HasColumnName("czas");
 
@@ -118,11 +119,18 @@ namespace Restauracja.Models
                     .IsRequired()
                     .HasColumnName("daneOsobowe");
 
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasColumnName("email");
+
+                entity.Property(e => e.Haslo)
+                    .IsRequired()
+                    .HasColumnName("haslo");
+
                 entity.Property(e => e.Telefon)
                     .IsRequired()
                     .HasColumnName("telefon")
-                    .HasMaxLength(9)
-                    .IsUnicode(false);
+                    .HasMaxLength(9);
             });
 
             modelBuilder.Entity<ListaDodatkow>(entity =>
@@ -148,6 +156,29 @@ namespace Restauracja.Models
                     .HasConstraintName("LISTA_DODATKOW_PIZZA");
             });
 
+            modelBuilder.Entity<ListaPizz>(entity =>
+            {
+                entity.HasKey(e => new { e.IdPizza, e.IdZamowienie });
+
+                entity.ToTable("LISTA_PIZZ");
+
+                entity.Property(e => e.IdPizza).HasColumnName("idPizza");
+
+                entity.Property(e => e.IdZamowienie).HasColumnName("idZamowienie");
+
+                entity.HasOne(d => d.IdPizzaNavigation)
+                    .WithMany(p => p.ListaPizz)
+                    .HasForeignKey(d => d.IdPizza)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("LISTA_PIZZ_PIZZA");
+
+                entity.HasOne(d => d.IdZamowienieNavigation)
+                    .WithMany(p => p.ListaPizz)
+                    .HasForeignKey(d => d.IdZamowienie)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("LISTA_PIZZ_ZAMOWIENIE");
+            });
+
             modelBuilder.Entity<Pizza>(entity =>
             {
                 entity.HasKey(e => e.IdPizza);
@@ -160,25 +191,26 @@ namespace Restauracja.Models
 
                 entity.Property(e => e.Cena).HasColumnName("cena");
 
-                entity.Property(e => e.IdPromocja)
-                    .HasColumnName("idPromocja")
-                    .HasMaxLength(8)
-                    .IsUnicode(false);
+                entity.Property(e => e.IdPromocja).HasColumnName("idPromocja");
+
+                entity.Property(e => e.IdRozmiar).HasColumnName("idRozmiar");
 
                 entity.Property(e => e.IdSos).HasColumnName("idSos");
 
                 entity.Property(e => e.Nazwa)
                     .IsRequired()
-                    .HasColumnName("nazwa")
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Rozmiar).HasColumnName("rozmiar");
+                    .HasColumnName("nazwa");
 
                 entity.HasOne(d => d.IdPromocjaNavigation)
                     .WithMany(p => p.Pizza)
                     .HasForeignKey(d => d.IdPromocja)
                     .HasConstraintName("PIZZA_PROMOCJA");
+
+                entity.HasOne(d => d.IdRozmiarNavigation)
+                    .WithMany(p => p.Pizza)
+                    .HasForeignKey(d => d.IdRozmiar)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PIZZA_ROZMIAR");
 
                 entity.HasOne(d => d.IdSosNavigation)
                     .WithMany(p => p.Pizza)
@@ -194,8 +226,6 @@ namespace Restauracja.Models
 
                 entity.Property(e => e.IdPromocja)
                     .HasColumnName("idPromocja")
-                    .HasMaxLength(8)
-                    .IsUnicode(false)
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.Do)
@@ -206,9 +236,7 @@ namespace Restauracja.Models
 
                 entity.Property(e => e.Nazwa)
                     .IsRequired()
-                    .HasColumnName("nazwa")
-                    .HasMaxLength(32)
-                    .IsUnicode(false);
+                    .HasColumnName("nazwa");
 
                 entity.Property(e => e.Od)
                     .HasColumnName("od")
@@ -217,6 +245,23 @@ namespace Restauracja.Models
                 entity.Property(e => e.Opis)
                     .IsRequired()
                     .HasColumnName("opis");
+            });
+
+            modelBuilder.Entity<Rozmiar>(entity =>
+            {
+                entity.HasKey(e => e.IdRozmiar);
+
+                entity.ToTable("ROZMIAR");
+
+                entity.Property(e => e.IdRozmiar)
+                    .HasColumnName("idRozmiar")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Multiplier).HasColumnName("multiplier");
+
+                entity.Property(e => e.Nazwa)
+                    .IsRequired()
+                    .HasColumnName("nazwa");
             });
 
             modelBuilder.Entity<Sos>(entity =>
@@ -233,9 +278,7 @@ namespace Restauracja.Models
 
                 entity.Property(e => e.Nazwa)
                     .IsRequired()
-                    .HasColumnName("nazwa")
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
+                    .HasColumnName("nazwa");
             });
 
             modelBuilder.Entity<Zamowienie>(entity =>
@@ -248,36 +291,31 @@ namespace Restauracja.Models
                     .HasColumnName("idZamowienie")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.CenaZamowienia).HasColumnName("cenaZamowienia");
+                entity.Property(e => e.Adres)
+                    .IsRequired()
+                    .HasColumnName("adres");
+
+                entity.Property(e => e.Cena).HasColumnName("cena");
 
                 entity.Property(e => e.Czas).HasColumnName("czas");
 
                 entity.Property(e => e.IdKlient).HasColumnName("idKlient");
 
-                entity.Property(e => e.IdPizza).HasColumnName("idPizza");
-
-                entity.Property(e => e.IdPromocja)
-                    .HasColumnName("idPromocja")
-                    .HasMaxLength(8)
-                    .IsUnicode(false);
+                entity.Property(e => e.IdPromocja).HasColumnName("idPromocja");
 
                 entity.Property(e => e.Stan)
                     .IsRequired()
-                    .HasColumnName("stan")
-                    .HasMaxLength(16)
-                    .IsUnicode(false);
+                    .HasColumnName("stan");
+
+                entity.Property(e => e.Telefon)
+                    .IsRequired()
+                    .HasColumnName("telefon")
+                    .HasMaxLength(9);
 
                 entity.HasOne(d => d.IdKlientNavigation)
                     .WithMany(p => p.Zamowienie)
                     .HasForeignKey(d => d.IdKlient)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("ZAMOWIENIE_KLIENT");
-
-                entity.HasOne(d => d.IdPizzaNavigation)
-                    .WithMany(p => p.Zamowienie)
-                    .HasForeignKey(d => d.IdPizza)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("ZAMOWIENIE_PIZZA");
 
                 entity.HasOne(d => d.IdPromocjaNavigation)
                     .WithMany(p => p.Zamowienie)
